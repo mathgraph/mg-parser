@@ -1,6 +1,8 @@
-define(['mg-parser/functions', 'mg-parser/operators'],
-    function (functions, operators) {
-        var pushToken = function (tokens, type, value) {
+define(['mg-parser/config'],
+    function (config) {
+        var functions = config.functions,
+        operators = config.operators,
+        pushToken = function (tokens, type, value) {
             if (type === 'number') {
                 tokens.push({type: type, value: parseFloat(value)});
             } else if (type === 'operator') {
@@ -11,7 +13,7 @@ define(['mg-parser/functions', 'mg-parser/operators'],
                 tokens.push({type: type, value: value});
             } else if (type === 'space' || typeof type === 'undefined') {
             } else {
-                throw type + " undefined";
+                throw {code: config.error.OTHER};
             }
         };
 
@@ -66,7 +68,7 @@ define(['mg-parser/functions', 'mg-parser/operators'],
                     previosValue = str[i];
                     typeOfPrevious = 'closingParenthesis';
                 } else {
-                    throw "error input!";
+                    throw {code: config.error.OTHER};
                 }
             }
             pushToken(tokens, typeOfPrevious, previosValue);
